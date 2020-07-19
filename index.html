@@ -5,20 +5,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FontStats</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style/style.css">
 </head>
 
 <body>
-  <!-- <label for="text-input">Type your text here</label> -->
-  <textarea id="text-input" name="text-input" rows="50" cols="60"></textarea>
-  <div class="diagramm-wrapper"><canvas id="canvas-diagramm"></canvas></div>
-  <div class="diagramm-wrapper">
-    <p id="ps-diagramm"></p>
+  <div class="welcome">Gib hier deinen Text ein</div>
+
+  <div class="text-input__wrapper">
+    <textarea id="text-input" name="text-input" rows="50" cols="66"></textarea>
   </div>
+  
+  <!-- <div class="diagramm-wrapper"> -->
+    <svg id="bar-diagramm" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg>
+  <!-- </div> -->
   <div class="diagramm-wrapper">
-    <p id="pc-diagramm"></p>
+    <p id="textscaley-diagramm"></p>
   </div>
-  <script type="text/javascript" src="script.js"></script>
+  
+  <div id="textcolor-diagramm"></div>
+  <div id="basic-stats"></div>
+  <div id="statsInText"></div>
+  <script type="module" src="js/script.js"></script>
 </body>
 
 </html>
