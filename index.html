@@ -12,19 +12,27 @@
   <div class="welcome">Gib hier deinen Text ein</div>
 
   <div class="text-input__wrapper">
-    <textarea id="text-input" name="text-input" rows="50" cols="66"></textarea>
+    <textarea id="text-input" name="text-input"></textarea>
   </div>
-  
-  <!-- <div class="diagramm-wrapper"> -->
-    <svg id="bar-diagramm" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg>
-  <!-- </div> -->
-  <div class="diagramm-wrapper">
-    <p id="textscaley-diagramm"></p>
+  <div class="statistics">
+    <div class="statistics__text-wrapper">
+      <div id="basic-stats"></div>
+    </div>
+    <div class="statistics__diagram-wrapper">
+      <div id="bar-diagramm"></div>
+    </div>
+    <div class="statistics__text-wrapper">
+      <div id="top-words"></div>
+      <div id="stats-in-text" class="statistics__text"></div>
+
+      <h2>Eine kreative Auseinandersetung</h2>
+      <div id="textscaley-diagramm" class="statistics__text"></div>
+      <div id="textcolor-diagramm" class="statistics__text"></div>
+
+      <footer>Made with ❤️ by Dominik Kuhn</footer>
+    </div>
   </div>
-  
-  <div id="textcolor-diagramm"></div>
-  <div id="basic-stats"></div>
-  <div id="statsInText"></div>
+
   <script type="module" src="js/script.js"></script>
 </body>
 

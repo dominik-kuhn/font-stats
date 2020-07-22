@@ -1,4 +1,4 @@
-import { createBarDiagram, createTextScaleYDiagram, createTextColorDiagram, createStats, createText } from './diagram.js';
+import { createBarDiagram, createTextScaleYDiagram, createTextColorDiagram, createStats, createText, createTopWords } from './diagram.js';
 import { letters, words, sentences, readingTime } from './data.js';
 
 let textInput = document.querySelector('#text-input');
@@ -9,9 +9,13 @@ const getData = (input) => {
   let dataWords = words(input);
   let dataWordsCount = Object.values(dataWords).reduce((last, value) => last + value);
   let dataUniqueWordsCount = Object.keys(dataWords).length;
+  let dataTopWords = Object.entries(dataWords).sort((a, b) => b[1] - a[1]).slice(0,5);
+  let dataAverageWordLength = Math.round(((Object.keys(dataWords).reduce((a, b) => a + b).length / dataWordsCount || 0) + Number.EPSILON) * 100) / 100;
   let dataSentences = sentences(input);
   let dataSentencesCount = dataSentences.length;
+  let dataAverageSentenceLength = Math.round(((dataSentences.reduce((a, b) => a + b).length / dataSentencesCount || 0) + Number.EPSILON) * 100) / 100;
   let dataReadingTime = readingTime(dataWordsCount);
+  console.log(dataSentences);
 
   return {
     letters: dataLetters,
@@ -19,23 +23,37 @@ const getData = (input) => {
     words: dataWords,
     wordsCount: dataWordsCount,
     uniqueWordsCount: dataUniqueWordsCount,
+    topWords: dataTopWords,
+    averageWordLength: dataAverageWordLength,
     sentences: dataSentences,
     sentencesCount: dataSentencesCount,
+    averageSentenceLength: dataAverageSentenceLength,
     readingTime: dataReadingTime
   }
 }
 
 const letterStats = (input) => {
+  input = input.trim();
   let data = getData(input);
   createBarDiagram(data);
   createTextScaleYDiagram(input, data);
   createTextColorDiagram(input, data);
   createStats(data);
   createText(data);
+  createTopWords(data);
 }
 
 const triggerStats = () => {
-  letterStats(textInput.value);
+  let statistics = document.querySelector('.statistics');
+  let welcome = document.querySelector('.welcome');
+  if(textInput.value && textInput.value.trim()) {
+    letterStats(textInput.value);
+    statistics.style.display = 'block';
+    welcome.classList.add('welcome--hidden');
+  } else {
+    statistics.style.display = 'none';
+    welcome.classList.remove('welcome--hidden');
+  }
 }
 
 textInput.addEventListener('input', triggerStats);

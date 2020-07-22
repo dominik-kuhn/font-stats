@@ -2,47 +2,54 @@ import {mapRange, text} from './base.js';
 
 export const createBarDiagram = (data) => {
   data = data.letters;
-  let svg = document.querySelector("#bar-diagramm");
+  let output = document.querySelector("#bar-diagramm");
+  output.innerHTML = '';
   let svgNS = "http://www.w3.org/2000/svg";
-  let barHeight = 35;
-  let maxBarWidth = 100;
+  let svg = document.createElementNS(svgNS, "svg");
+  let barWidth = 6;
+  let maxBarHeight = 90;
   let barColor = '#000000';
   let barTextPadding = 10;
-  let barMargin = 15;
+  let barMargin = 30;
   let dataMax = Math.max(...Object.values(data));
   let entriesCount = Object.keys(data).length;
-  let barX = 0;
-  let barY = barMargin / 2;
 
-  svg.innerHTML = '';
-  svg.setAttributeNS(null, 'height', (entriesCount * barHeight + entriesCount * barMargin));
+  let barX = barMargin / 2;
+  let barY = maxBarHeight;
+  let textY = maxBarHeight + barTextPadding / 2;
+  
+  svg.setAttributeNS(null, 'width', (entriesCount * barWidth + entriesCount * barMargin));
 
   for (let [letter, count] of Object.entries(data)) {
     let barGroup = document.createElementNS(svgNS, "g");
     barGroup.setAttributeNS(null, 'class', 'bar');
     
-    let barWidth = mapRange(count, 0, dataMax, 0, maxBarWidth);
+    let barHeight = mapRange(count, 0, dataMax, 0, maxBarHeight);
     let bar = document.createElementNS(svgNS, "rect");
     bar.setAttributeNS(null, 'id', `bar-${letter}`);
     bar.setAttributeNS(null, 'x', barX);
-    bar.setAttributeNS(null, 'y', barY);
-    bar.setAttributeNS(null, 'width', barWidth + '%');
-    bar.setAttributeNS(null, 'height', barHeight);
+    bar.setAttributeNS(null, 'y', `${barY - barHeight}%`);
+    bar.setAttributeNS(null, 'rx', barWidth / 2);
+    bar.setAttributeNS(null, 'yx', barWidth / 2);
+    bar.setAttributeNS(null, 'width', barWidth);
+    bar.setAttributeNS(null, 'height', `${barHeight}%`);
     bar.setAttributeNS(null, 'fill', barColor);
 
     let barLabel = document.createElementNS(svgNS, "text");
     barLabel.setAttributeNS(null, 'id', `label-${letter}`);
-    barLabel.setAttributeNS(null, 'x', barX + barTextPadding);
-    barLabel.setAttributeNS(null, 'y', barY + barHeight / 2);
+    barLabel.setAttributeNS(null, 'x', barX + barWidth / 2);
+    barLabel.setAttributeNS(null, 'y', `${textY}%`);
     barLabel.setAttributeNS(null, 'dominant-baseline', 'middle');
+    barLabel.setAttributeNS(null, 'text-anchor', 'middle');
     barLabel.textContent = letter;
     
-    barY += barHeight + barMargin;
+    barX += barWidth + barMargin;
 
     barGroup.appendChild(bar);
     barGroup.appendChild(barLabel);
     svg.appendChild(barGroup);
   }
+  output.appendChild(svg);
 }
 
 export const createTextScaleYDiagram = (input, data) => {
@@ -51,16 +58,31 @@ export const createTextScaleYDiagram = (input, data) => {
   let min = 0;
   let maxHeight = 3;
   let minHeight = 0.5;
-  let textOutput = document.querySelector("#textscaley-diagramm");
-  textOutput.innerHTML = "";
-
+  let output = document.querySelector('#textscaley-diagramm');
+  output.innerHTML = '';
+  
+  let spanWord = document.createElement('span');
+  spanWord.classList.add('diagram-word');
   for (let c of input) {
-    let span = document.createElement('span');
-    span.innerHTML = c;
-    c = c.toLowerCase();
-    span.style.transform = "scaleY(" + mapRange(data[c], min, max, minHeight, maxHeight) + ")";
-    textOutput.appendChild(span);
+    if(c == ' ') {
+      output.appendChild(spanWord);
+      output.appendChild(document.createTextNode(' '));
+      spanWord = document.createElement('span');
+      spanWord.classList.add('diagram-word');
+    } else if (c.match(/\r|\n/)) {
+      output.appendChild(spanWord);
+      output.appendChild(document.createElement('br'));
+      spanWord = document.createElement('span');
+      spanWord.classList.add('diagram-word');
+    } else {
+      let spanLetter = document.createElement('span');
+      spanLetter.innerHTML = c;
+      c = c.toLowerCase();
+      spanLetter.style.transform = `scaleY(${mapRange(data[c], min, max, minHeight, maxHeight)})`;
+      spanWord.appendChild(spanLetter);
+    }
   }
+  output.appendChild(spanWord);
 }
 
 export const createTextColorDiagram = (input, data) => {
@@ -68,39 +90,92 @@ export const createTextColorDiagram = (input, data) => {
   let max = Math.max(...Object.values(data));
   let min = 0;
   let maxLightness = 1;
-  let minLightness = 0.1;
-  let textOutput = document.querySelector("#textcolor-diagramm");
-  textOutput.innerHTML = "";
+  let minLightness = 0.2;
+  let output = document.querySelector('#textcolor-diagramm');
+  output.innerHTML = '';
 
+  let spanWord = document.createElement('span');
+  spanWord.classList.add('diagram-word');
   for (let c of input) {
-    let span = null;
     if(c == ' ') {
-      span = document.createTextNode(' ');
+      output.appendChild(spanWord);
+      output.appendChild(document.createTextNode(' '));
+      spanWord = document.createElement('span');
+      spanWord.classList.add('diagram-word');
     } else if (c.match(/\r|\n/)) {
-      span = document.createElement('br')
+      output.appendChild(spanWord);
+      output.appendChild(document.createElement('br'));
+      spanWord = document.createElement('span');
+      spanWord.classList.add('diagram-word');
     } else {
-      span = document.createElement('span');
-      span.innerHTML = c;
+      let spanLetter = document.createElement('span');
+      spanLetter.innerHTML = c;
       c = c.toLowerCase();
-      span.style.color = "rgba(0, 0, 0, " + (data[c] ? mapRange(data[c], min, max, minLightness, maxLightness) : minLightness) + ")";
+      spanLetter.style.color = `rgba(0, 0, 0, ${(data[c] ? mapRange(data[c], min, max, minLightness, maxLightness) : minLightness)})`;
+      spanWord.appendChild(spanLetter);
     }
-    textOutput.appendChild(span);
   }
+  output.appendChild(spanWord);
 }
 
 export const createStats = (data) => {
-  let textOutput = document.querySelector("#basic-stats");
-  textOutput.innerHTML = `${data.lettersCount} ${data.lettersCount === 1 ? 'Buchstabe' : 'Buchstaben'}<br />${data.wordsCount} ${data.wordsCount === 1 ? 'Wort' : 'Wörter'}<br />${data.sentencesCount} ${data.sentencesCount === 1 ? 'Satz' : 'Sätze'}`;
+  let output = document.querySelector("#basic-stats");
+  output.innerHTML = '';
+  output.innerHTML += `${data.lettersCount} ${data.lettersCount === 1 ? 'Buchstabe' : 'Buchstaben'}`;
+  output.appendChild(document.createElement('br'));
+  output.innerHTML += `${data.wordsCount} ${data.wordsCount === 1 ? 'Wort' : 'Wörter'}`;
+  output.appendChild(document.createElement('br'));
+  output.innerHTML += `${data.sentencesCount} ${data.sentencesCount === 1 ? 'Satz' : 'Sätze'}`;
+  output.appendChild(document.createElement('br'));
+  output.innerHTML += `${data.readingTime.h ? data.readingTime.h + 'h ' : ''}${data.readingTime.m}m ${data.readingTime.s}s Lesezeit`;
+}
+
+export const createTopWords = (data) => {
+  let output = document.querySelector("#top-words");
+  output.innerHTML = '';
+  
+  for(let [i, [word, count]] of Object.entries(data.topWords)) {
+    i = parseInt(i);
+    let topWordGroup = document.createElement('div');
+    let topWord = document.createElement('div');
+    if(i === 0) {
+      topWord.classList.add('top-1');
+    } else {
+      topWord.classList.add('top-other');
+    }
+    topWord.innerHTML = `${i + 1}. ${word}`;
+    let topCount = document.createElement('span');
+    topCount.classList.add('top-count');
+    topCount.innerHTML = `${count}x`;
+    topWord.appendChild(document.createTextNode(' '));
+    topWord.appendChild(topCount);
+    topWordGroup.appendChild(topWord);
+    output.appendChild(topWordGroup);
+  }
 }
 
 export const createText = (data) => {
-  let textOutput = document.querySelector("#statsInText");
-  textOutput.innerHTML = '';
+  let output = document.querySelector("#stats-in-text");
+  output.innerHTML = '';
+
+  output.innerHTML += text('counts', {
+    lettersCount: `${data.lettersCount} ${data.lettersCount === 1 ? 'Buchstabe' : 'Buchstaben'}`, 
+    wordsCount: `${data.wordsCount} ${data.wordsCount === 1 ? 'Wort' : 'Wörter'}`, 
+    uniqueWordsCount: `${data.uniqueWordsCount} ${data.uniqueWordsCount === 1 ? 'einzigartiges Wort' : 'einzigartige Wörter'}`, 
+    sentencesCount: `${data.sentencesCount} ${data.sentencesCount === 1 ? 'Satz' : 'Sätze'}`
+  });
+  output.innerHTML += text('average', {
+    averageWordLength: data.averageWordLength,
+    averageSentenceLength: data.averageSentenceLength
+  })
+  output.innerHTML += text('readingTime', {time: `${data.readingTime.h ? data.readingTime.h + 'h ' : ''}${data.readingTime.m}m ${data.readingTime.s}s`});
   for (let [letter, count] of Object.entries(data.letters)) {
+    if(count === 0)
+      continue;
+
     if(letter.match(/[0-9]/))
-      textOutput.innerHTML += text('numbers', {letter: letter, count: count});
+      output.innerHTML += text('numbers', {letter: letter, count: count});
     else
-      textOutput.innerHTML += text('letters', {letter: letter, count: count});
+      output.innerHTML += text('letters', {letter: letter, count: count});
   }
-  textOutput.innerHTML += text('readingTime', {time: `${data.readingTime.h}h ${data.readingTime.m}m ${data.readingTime.s}s`});
 }
