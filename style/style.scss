@@ -108,6 +108,20 @@ body {
     max-width: 100%;
   }
 
+  &__headline {
+    width: 40rem;
+    max-width: 100%;
+    margin-top: 7rem;
+    margin-bottom: 1.5rem;
+    font-size: 2em;
+    line-height: 1.1;
+    hyphens: auto;
+    
+    @media only screen and (min-width: 600px) {
+      font-size: 3em;
+    }
+  }
+
   @media only screen and (min-height: 75rem) {
     top: calc(100vh - (100vh - 60rem) / 2 + 2rem);
   }
@@ -150,10 +164,19 @@ body {
 }
 
 #basic-stats {
-  font-size: 10vw;
+  font-size: 11vw;
   line-height: 1.1;
+  hyphens: auto;
   
-  @media only screen and (min-width: 1500px) {
+  @media only screen and (min-width: 600px) {
+    font-size: 5em;
+  }
+
+  @media only screen and (min-width: 1200px) {
+    font-size: 7em;
+  }
+
+  @media only screen and (min-width: 1700px) {
     font-size: 9em;
   }
 }
@@ -167,6 +190,7 @@ body {
   hyphens: auto;
   .top-1 {
     font-size: 2em;
+    line-height: 1.5;
     @media only screen and (min-width: 1500px) {
       font-size: 5em;
     }

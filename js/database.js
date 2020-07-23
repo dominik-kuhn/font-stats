@@ -1,6 +1,6 @@
 export default {
   readingTime: [
-    'Die Lesezeit beträgt %time%.',
+    'Die Lesezeit beträgt ungefähr %time%.',
     'Man benötigt ungefähr %time% um den Text zu lesen.',
     'Um den Text zu lesen benötigt man ca. %time%.'
   ],
@@ -14,11 +14,20 @@ export default {
     'Die "%letter%" ist %count% mal vorhanden.'
   ],
   counts: [
-    'Der Text besteht aus %sentencesCount%, %wordsCount%, %uniqueWordsCount% und %lettersCount%.',
-    'Der Text beinhaltet %sentencesCount%. Insgesamt besteht er aus %wordsCount%, wobei %uniqueWordsCount% sind. Die gesamte Buchstabenanzahl beträgt %lettersCount%.'
+    'Der Text besteht aus %sentencesCount% Sätzen, %wordsCount% Wörtern, %uniqueWordsCount% verschiedenen Wörtern und %lettersCount% Buchstaben.',
+    'Der Text beinhaltet %sentencesCount% Sätze. Insgesamt besteht er aus %wordsCount% Wörtern, wobei %uniqueWordsCount% davon verschiedene Wörter sind. Die gesamte Buchstabenanzahl beträgt %lettersCount%.'
   ],
   average: [
-    'Die durchschnittliche Wortlänge beträgt %averageWordLength% Buchstaben, die durchschnittliche Satzlänge %averageSentenceLength% Buchstaben.'
+    'Die durchschnittliche Wortlänge beträgt %averageWordLength% Buchstaben, die durchschnittliche Satzlänge %averageSentenceLength% Buchstaben bzw. %averageWordsPerSentence% Wörter.',
+    'Durchschnittlich ist ein Wort %averageWordLength% Buchstaben lang. Ein Satz besteht durchschnittlich aus %averageSentenceLength% Buchstaben oder auch %averageWordsPerSentence% Wörtern.'
+  ],
+  topWordsIntroduction: [
+    'Die folgenden Wörter kommen in dem Text am häufigsten vor:',
+    'Folgende Wörter des Textes treten am häufigsten auf:'
+  ],
+  topWords: [
+    'Das Wort "%word%" kommt %count% mal vor.',
+    '"%word%" kommt %count% mal vor.',
+    'Das Wort "%word%" tritt %count% mal auf.'
   ]
-
 }

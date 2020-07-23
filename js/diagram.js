@@ -121,11 +121,11 @@ export const createTextColorDiagram = (input, data) => {
 export const createStats = (data) => {
   let output = document.querySelector("#basic-stats");
   output.innerHTML = '';
-  output.innerHTML += `${data.lettersCount} ${data.lettersCount === 1 ? 'Buchstabe' : 'Buchstaben'}`;
+  output.innerHTML += `${data.sentencesCount} ${data.sentencesCount === 1 ? 'Satz' : 'Sätze'}`;
   output.appendChild(document.createElement('br'));
   output.innerHTML += `${data.wordsCount} ${data.wordsCount === 1 ? 'Wort' : 'Wörter'}`;
   output.appendChild(document.createElement('br'));
-  output.innerHTML += `${data.sentencesCount} ${data.sentencesCount === 1 ? 'Satz' : 'Sätze'}`;
+  output.innerHTML += `${data.lettersCount} ${data.lettersCount === 1 ? 'Buchstabe' : 'Buchstaben'}`;
   output.appendChild(document.createElement('br'));
   output.innerHTML += `${data.readingTime.h ? data.readingTime.h + 'h ' : ''}${data.readingTime.m}m ${data.readingTime.s}s Lesezeit`;
 }
@@ -159,16 +159,24 @@ export const createText = (data) => {
   output.innerHTML = '';
 
   output.innerHTML += text('counts', {
-    lettersCount: `${data.lettersCount} ${data.lettersCount === 1 ? 'Buchstabe' : 'Buchstaben'}`, 
-    wordsCount: `${data.wordsCount} ${data.wordsCount === 1 ? 'Wort' : 'Wörter'}`, 
-    uniqueWordsCount: `${data.uniqueWordsCount} ${data.uniqueWordsCount === 1 ? 'einzigartiges Wort' : 'einzigartige Wörter'}`, 
-    sentencesCount: `${data.sentencesCount} ${data.sentencesCount === 1 ? 'Satz' : 'Sätze'}`
+    lettersCount: data.lettersCount, 
+    wordsCount: data.wordsCount, 
+    uniqueWordsCount: data.uniqueWordsCount, 
+    sentencesCount: data.sentencesCount
   });
   output.innerHTML += text('average', {
     averageWordLength: data.averageWordLength,
-    averageSentenceLength: data.averageSentenceLength
-  })
+    averageSentenceLength: data.averageSentenceLength,
+    averageWordsPerSentence: data.averageWordsPerSentence
+  });
   output.innerHTML += text('readingTime', {time: `${data.readingTime.h ? data.readingTime.h + 'h ' : ''}${data.readingTime.m}m ${data.readingTime.s}s`});
+  output.innerHTML += text('topWordsIntroduction');
+  for(let [word, count] of data.topWords) {
+    output.innerHTML += text('topWords', {
+      word: word,
+      count: count
+    });
+  }
   for (let [letter, count] of Object.entries(data.letters)) {
     if(count === 0)
       continue;

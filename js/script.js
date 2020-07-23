@@ -10,12 +10,13 @@ const getData = (input) => {
   let dataWordsCount = Object.values(dataWords).reduce((last, value) => last + value);
   let dataUniqueWordsCount = Object.keys(dataWords).length;
   let dataTopWords = Object.entries(dataWords).sort((a, b) => b[1] - a[1]).slice(0,5);
-  let dataAverageWordLength = Math.round(((Object.keys(dataWords).reduce((a, b) => a + b).length / dataWordsCount || 0) + Number.EPSILON) * 100) / 100;
+  let dataAverageWordLength = Math.round(Object.keys(dataWords).reduce((a, b) => a + b).length / dataWordsCount || 0);
   let dataSentences = sentences(input);
   let dataSentencesCount = dataSentences.length;
-  let dataAverageSentenceLength = Math.round(((dataSentences.reduce((a, b) => a + b).length / dataSentencesCount || 0) + Number.EPSILON) * 100) / 100;
+  let dataAverageSentenceLength = Math.round(dataSentences.reduce((a, b) => a + b).length / dataSentencesCount || 0);
+  let dataAverageWordsPerSentence = Math.round(dataWordsCount / dataSentencesCount);
   let dataReadingTime = readingTime(dataWordsCount);
-  console.log(dataSentences);
+  console.log(dataTopWords);
 
   return {
     letters: dataLetters,
@@ -28,6 +29,7 @@ const getData = (input) => {
     sentences: dataSentences,
     sentencesCount: dataSentencesCount,
     averageSentenceLength: dataAverageSentenceLength,
+    averageWordsPerSentence: dataAverageWordsPerSentence,
     readingTime: dataReadingTime
   }
 }
