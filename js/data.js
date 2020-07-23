@@ -18,11 +18,13 @@ export const words = (input) => {
   let words = input
               .trim()
               .replace(/\s+/gi, ' ')
+              .replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '')
               .split(' ')
               .filter((n) => {
                 return n.length === 1 ? characters.includes(n.toLowerCase()) : n != '';
               });
   words.forEach((w) => {
+    w = w.trim();
     if(data[w])
       data[w] += 1;
     else

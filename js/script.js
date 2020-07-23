@@ -10,10 +10,10 @@ const getData = (input) => {
   let dataWordsCount = Object.values(dataWords).reduce((last, value) => last + value);
   let dataUniqueWordsCount = Object.keys(dataWords).length;
   let dataTopWords = Object.entries(dataWords).sort((a, b) => b[1] - a[1]).slice(0,5);
-  let dataAverageWordLength = Math.round(Object.keys(dataWords).reduce((a, b) => a + b).length / dataWordsCount || 0);
+  let dataAverageWordLength = Math.round(Object.entries(dataWords).reduce((a, b) => a + (b[0].length * b[1]), 0) / dataWordsCount);
   let dataSentences = sentences(input);
   let dataSentencesCount = dataSentences.length;
-  let dataAverageSentenceLength = Math.round(dataSentences.reduce((a, b) => a + b).length / dataSentencesCount || 0);
+  let dataAverageSentenceLength = Math.round(dataSentences.reduce((a, b) => a + b.length, 0) / dataSentencesCount);
   let dataAverageWordsPerSentence = Math.round(dataWordsCount / dataSentencesCount);
   let dataReadingTime = readingTime(dataWordsCount);
 
