@@ -16,7 +16,6 @@ const getData = (input) => {
   let dataAverageSentenceLength = Math.round(dataSentences.reduce((a, b) => a + b).length / dataSentencesCount || 0);
   let dataAverageWordsPerSentence = Math.round(dataWordsCount / dataSentencesCount);
   let dataReadingTime = readingTime(dataWordsCount);
-  console.log(dataTopWords);
 
   return {
     letters: dataLetters,
